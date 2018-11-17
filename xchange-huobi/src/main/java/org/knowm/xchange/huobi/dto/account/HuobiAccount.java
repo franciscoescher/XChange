@@ -28,7 +28,7 @@ public class HuobiAccount {
     return state;
   }
 
-  private String getType() {
+  public String getType() {
     return type;
   }
 

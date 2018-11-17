@@ -34,6 +34,20 @@ public class HuobiCreateOrderRequest {
     source = "api";
   }
 
+  public HuobiCreateOrderRequest(
+          String accountId, String amount, String price, String symbol, String type, boolean isMargin) {
+    this.accountId = accountId;
+    this.amount = amount;
+    this.price = price;
+    this.symbol = symbol;
+    this.type = type;
+    if (isMargin) {
+      source = "margin-api";
+    } else {
+      source = "api";
+    }
+  }
+
   public String getAccountId() {
     return accountId;
   }

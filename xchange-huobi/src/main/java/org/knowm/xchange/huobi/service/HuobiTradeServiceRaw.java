@@ -10,6 +10,7 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiUtils;
+import org.knowm.xchange.huobi.dto.account.HuobiAccount;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
@@ -91,6 +92,48 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
 
+  String placeHuobiMarginLimitOrder(LimitOrder limitOrder) throws IOException {
+    String type;
+    if (limitOrder.getType() == OrderType.BID) {
+      type = "buy-limit";
+    } else if (limitOrder.getType() == OrderType.ASK) {
+      type = "sell-limit";
+    } else {
+      throw new ExchangeException("Unsupported order type.");
+    }
+
+    HuobiAccount[] huobiAccounts =
+            ((HuobiAccountServiceRaw) exchange.getAccountService()).getAccounts();
+    HuobiAccount marginAccount = null;
+    for (HuobiAccount huobiAccount : huobiAccounts) {
+      if(huobiAccount.getType().equals("margin")) {
+        marginAccount = huobiAccount;
+        break;
+      }
+    }
+
+    if (marginAccount == null) {
+      throw new ExchangeException("Unable to find margin account.");
+    }
+
+    HuobiOrderResult result =
+            huobi.placeLimitOrder(
+                    new HuobiCreateOrderRequest(
+                            String.valueOf(marginAccount.getId()),
+                            limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                            limitOrder.getLimitPrice().toString(),
+                            HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
+                            type,
+                            true),
+                    exchange.getExchangeSpecification().getApiKey(),
+                    HuobiDigest.HMAC_SHA_256,
+                    2,
+                    HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+                    signatureCreator);
+
+    return checkResult(result);
+  }
+
   String placeHuobiMarketOrder(MarketOrder limitOrder) throws IOException {
     String type;
     if (limitOrder.getType() == OrderType.BID) {
@@ -115,6 +158,47 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
             2,
             HuobiUtils.createUTCDate(exchange.getNonceFactory()),
             signatureCreator);
+    return checkResult(result);
+  }
+
+  String placeHuobiMarginMarketOrder(MarketOrder limitOrder) throws IOException {
+    String type;
+    if (limitOrder.getType() == OrderType.BID) {
+      type = "buy-market";
+    } else if (limitOrder.getType() == OrderType.ASK) {
+      type = "sell-market";
+    } else {
+      throw new ExchangeException("Unsupported order type.");
+    }
+
+    HuobiAccount[] huobiAccounts =
+            ((HuobiAccountServiceRaw) exchange.getAccountService()).getAccounts();
+    HuobiAccount marginAccount = null;
+    for (HuobiAccount huobiAccount : huobiAccounts) {
+      if(huobiAccount.getType().equals("margin")) {
+        marginAccount = huobiAccount;
+        break;
+      }
+    }
+
+    if (marginAccount == null) {
+      throw new ExchangeException("Unable to find margin account.");
+    }
+
+    HuobiOrderResult result =
+            huobi.placeMarketOrder(
+                    new HuobiCreateOrderRequest(
+                            String.valueOf(marginAccount.getId()),
+                            limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                            null,
+                            HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
+                            type,
+                            true),
+                    exchange.getExchangeSpecification().getApiKey(),
+                    HuobiDigest.HMAC_SHA_256,
+                    2,
+                    HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+                    signatureCreator);
     return checkResult(result);
   }
 
