@@ -51,7 +51,7 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     return accountCache;
   }
 
-  public HuobiAccount getMarginAccount(CurrencyPair currencyPair) throws Exception {
+  public HuobiAccount getMarginAccount(CurrencyPair currencyPair) throws IOException {
     String base = currencyPair.base.getCurrencyCode();
     String counter = currencyPair.counter.getCurrencyCode();
     for (HuobiAccount account : this.getAccounts()) {
@@ -74,7 +74,7 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
         return account;
       }
     }
-    throw new Exception("Margin account not found for currency pair "+currencyPair.toString());
+    throw new IOException("Margin account not found for currency pair "+currencyPair.toString());
   }
 
   public String getDepositAddress(String currency) throws IOException {
