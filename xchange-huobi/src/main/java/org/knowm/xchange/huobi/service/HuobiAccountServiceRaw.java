@@ -3,18 +3,19 @@ package org.knowm.xchange.huobi.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import org.knowm.xchange.Exchange;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.huobi.Huobi;
 import org.knowm.xchange.huobi.HuobiUtils;
-import org.knowm.xchange.huobi.dto.account.HuobiAccount;
-import org.knowm.xchange.huobi.dto.account.HuobiBalance;
-import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
-import org.knowm.xchange.huobi.dto.account.HuobiDepositAddressWithTag;
-import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
+import org.knowm.xchange.huobi.dto.account.*;
 import org.knowm.xchange.huobi.dto.account.results.HuobiAccountResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiBalanceResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiCreateWithdrawResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressWithTagResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiFundingHistoryResult;
+
+import static org.knowm.xchange.currency.CurrencyPair.BTC_USDT;
 
 public class HuobiAccountServiceRaw extends HuobiBaseService {
   private HuobiAccount[] accountCache = null;
@@ -23,7 +24,7 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     super(exchange);
   }
 
-  HuobiBalance getHuobiBalance(String accountID) throws IOException {
+  public HuobiBalance getHuobiBalance(String accountID) throws IOException {
     HuobiBalanceResult huobiBalanceResult =
         huobi.getBalance(
             accountID,
@@ -48,6 +49,32 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     }
 
     return accountCache;
+  }
+
+  public HuobiAccount getMarginAccount(CurrencyPair currencyPair) throws Exception {
+    String base = currencyPair.base.getCurrencyCode();
+    String counter = currencyPair.counter.getCurrencyCode();
+    for (HuobiAccount account : this.getAccounts()) {
+      if (!account.isMargin()) {
+        continue;
+      }
+      int c = 0;
+      HuobiBalance balance = getHuobiBalance(String.valueOf(account.getId()));
+      for (HuobiBalanceRecord currencyBalance : balance.getList()) {
+        if(!currencyBalance.getType().equals("trade")) {
+          continue;
+        }
+        Currency currency = HuobiUtils.translateHuobiCurrencyCode(currencyBalance.getCurrency());
+
+        if(currency.getCurrencyCode().equals(base) || currency.getCurrencyCode().equals(counter)) {
+          c += 1;
+        }
+      }
+      if (c >= 2) {
+        return account;
+      }
+    }
+    throw new Exception("Margin account not found for currency pair "+currencyPair.toString());
   }
 
   public String getDepositAddress(String currency) throws IOException {

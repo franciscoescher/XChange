@@ -42,9 +42,9 @@ public class HuobiCreateOrderRequest {
     this.symbol = symbol;
     this.type = type;
     if (isMargin) {
-      source = "margin-api";
+      this.source = "margin-api";
     } else {
-      source = "api";
+      this.source = "api";
     }
   }
 

@@ -28,12 +28,19 @@ public class HuobiAccount {
     return state;
   }
 
-  public String getType() {
+  private String getType() {
     return type;
   }
 
   private String getUserID() {
     return userID;
+  }
+
+  public boolean isMargin() {
+    if(this.type.equals("margin")) {
+      return true;
+    }
+    return false;
   }
 
   @Override
