@@ -32,6 +32,15 @@ public class HuobiUtils {
     return pair;
   }
 
+  public static String createHuobiAsset(Currency currencyIn) {
+    String currency = assetMapReverse.get(currencyIn);
+    if ((currency == null) || (currency.length() == 0)) {
+      throw new ExchangeException(
+              String.format("Huobi doesn't support currency %s", currency.toString()));
+    }
+    return currency;
+  }
+
   public static String createUTCDate(SynchronizedValueFactory<Long> nonce) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

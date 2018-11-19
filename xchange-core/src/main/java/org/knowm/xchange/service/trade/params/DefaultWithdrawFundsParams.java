@@ -1,7 +1,7 @@
 package org.knowm.xchange.service.trade.params;
 
 import java.math.BigDecimal;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.knowm.xchange.currency.Currency;
 
 public class DefaultWithdrawFundsParams implements WithdrawFundsParams {

@@ -5,10 +5,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiAdapters;
+import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.account.HuobiAccount;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.DefaultWithdrawFundsParams;
@@ -93,5 +95,17 @@ public class HuobiAccountService extends HuobiAccountServiceRaw implements Accou
   @Override
   public String requestDepositAddress(Currency currency, String... strings) throws IOException {
     return getDepositAddress(currency.toString());
+  }
+
+  public String getMarginAccountID(CurrencyPair pair) throws IOException {
+    return HuobiAccountServiceRaw.getMarginAccountID
+            (HuobiUtils.createHuobiAsset(pair.base), HuobiUtils.createHuobiAsset(pair.counter));
+  }
+
+  public long requestBorrowCurrency(CurrencyPair pair, Currency currency, BigDecimal amount) throws IOException {
+    return borrowCurrency(
+            HuobiUtils.createHuobiCurrencyPair(pair),
+            HuobiUtils.createHuobiAsset(currency),
+            amount);
   }
 }
