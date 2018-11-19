@@ -95,7 +95,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
 
-  String placeHuobiMarginLimitOrder(LimitOrder limitOrder) throws IOException {
+  String placeHuobiMarginLimitOrder(LimitOrder limitOrder, String accountID) throws IOException {
     String type;
     if (limitOrder.getType() == OrderType.BID) {
       type = "buy-limit";
@@ -108,9 +108,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     HuobiOrderResult result =
         huobi.placeLimitOrder(
             new HuobiCreateOrderRequest(
-                    String.valueOf(
-                            ((HuobiAccountServiceRaw) exchange.getAccountService())
-                                    .getMarginAccount(limitOrder.getCurrencyPair()).getId()),
+                    accountID,
                 limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
                 limitOrder.getLimitPrice().toString(),
                 HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
@@ -125,11 +123,19 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
 
-  String placeHuobiMarketOrder(MarketOrder limitOrder) throws IOException {
+  String placeHuobiMarginLimitOrder(LimitOrder limitOrder) throws IOException {
+    String accountID = String.valueOf(
+            ((HuobiAccountServiceRaw) exchange.getAccountService())
+                    .getMarginAccount(limitOrder.getCurrencyPair()).getId());
+
+    return placeHuobiMarginLimitOrder(limitOrder, accountID);
+  }
+
+  String placeHuobiMarketOrder(MarketOrder marketOrder) throws IOException {
     String type;
-    if (limitOrder.getType() == OrderType.BID) {
+    if (marketOrder.getType() == OrderType.BID) {
       type = "buy-market";
-    } else if (limitOrder.getType() == OrderType.ASK) {
+    } else if (marketOrder.getType() == OrderType.ASK) {
       type = "sell-market";
     } else {
       throw new ExchangeException("Unsupported order type.");
@@ -140,9 +146,9 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
                 String.valueOf(
                     ((HuobiAccountServiceRaw) exchange.getAccountService())
                         .getAccounts()[0].getId()),
-                limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                    marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
                 null,
-                HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
+                HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
                 type),
             exchange.getExchangeSpecification().getApiKey(),
             HuobiDigest.HMAC_SHA_256,
@@ -152,7 +158,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
 
-  String placeHuobiMarginMarketOrder(MarketOrder marketOrder) throws IOException {
+  String placeHuobiMarginMarketOrder(MarketOrder marketOrder, String accountID) throws IOException {
     String type;
     if (marketOrder.getType() == OrderType.BID) {
       type = "buy-market";
@@ -165,9 +171,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     HuobiOrderResult result =
             huobi.placeMarketOrder(
                     new HuobiCreateOrderRequest(
-                            String.valueOf(
-                                    ((HuobiAccountServiceRaw) exchange.getAccountService())
-                                            .getMarginAccount(marketOrder.getCurrencyPair()).getId()),
+                            accountID,
                             marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
                             null,
                             HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
@@ -179,6 +183,14 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
                     HuobiUtils.createUTCDate(exchange.getNonceFactory()),
                     signatureCreator);
     return checkResult(result);
+  }
+
+  String placeHuobiMarginMarketOrder(MarketOrder marketOrder) throws IOException {
+    String accountID = String.valueOf(
+            ((HuobiAccountServiceRaw) exchange.getAccountService())
+                    .getMarginAccount(marketOrder.getCurrencyPair()).getId());
+
+    return placeHuobiMarginMarketOrder(marketOrder, accountID);
   }
 
   List<HuobiOrder> getHuobiOrder(String... orderIds) throws IOException {

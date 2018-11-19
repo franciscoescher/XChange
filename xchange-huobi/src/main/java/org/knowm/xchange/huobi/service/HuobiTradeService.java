@@ -61,6 +61,10 @@ public class HuobiTradeService extends HuobiTradeServiceRaw implements TradeServ
     return placeHuobiMarginMarketOrder(marketOrder);
   }
 
+  public String placeMarginMarketOrder(MarketOrder marketOrder, String accountID) throws IOException {
+    return placeHuobiMarginMarketOrder(marketOrder, accountID);
+  }
+
   @Override
   public OpenOrders getOpenOrders() throws IOException {
     return getOpenOrders(createOpenOrdersParams());
@@ -79,6 +83,10 @@ public class HuobiTradeService extends HuobiTradeServiceRaw implements TradeServ
 
   public String placeMarginLimitOrder(LimitOrder limitOrder) throws IOException {
     return placeHuobiMarginLimitOrder(limitOrder);
+  }
+
+  public String placeMarginLimitOrder(LimitOrder limitOrder, String accountID) throws IOException {
+    return placeHuobiMarginLimitOrder(limitOrder, accountID);
   }
 
   @Override
