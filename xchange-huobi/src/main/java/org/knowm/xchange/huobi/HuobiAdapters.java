@@ -32,6 +32,7 @@ import org.knowm.xchange.huobi.dto.account.HuobiBalanceSum;
 import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiAsset;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiAssetPair;
+import org.knowm.xchange.huobi.dto.marketdata.HuobiKLine;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiTicker;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 
@@ -49,6 +50,18 @@ public class HuobiAdapters {
     builder.low(huobiTicker.getLow());
     builder.volume(huobiTicker.getVol());
     builder.timestamp(huobiTicker.getTs());
+    builder.currencyPair(currencyPair);
+    return builder.build();
+  }
+
+  public static Ticker adaptKLine(HuobiKLine huobiKLine, CurrencyPair currencyPair) {
+    Ticker.Builder builder = new Ticker.Builder();
+    builder.open(huobiKLine.getOpen());
+    builder.last(huobiKLine.getClose());
+    builder.high(huobiKLine.getHigh());
+    builder.low(huobiKLine.getLow());
+    builder.volume(huobiKLine.getVol());
+    builder.timestamp(huobiKLine.getTs());
     builder.currencyPair(currencyPair);
     return builder.build();
   }

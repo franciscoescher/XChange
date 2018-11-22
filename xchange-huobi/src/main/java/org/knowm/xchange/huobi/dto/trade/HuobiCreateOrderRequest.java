@@ -35,7 +35,7 @@ public class HuobiCreateOrderRequest {
   }
 
   public HuobiCreateOrderRequest(
-          String accountId, String amount, String price, String symbol, String type, boolean isMargin) {
+      String accountId, String amount, String price, String symbol, String type, boolean isMargin) {
     this.accountId = accountId;
     this.amount = amount;
     this.price = price;

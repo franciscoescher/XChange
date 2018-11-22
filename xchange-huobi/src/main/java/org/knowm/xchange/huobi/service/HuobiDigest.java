@@ -57,6 +57,7 @@ public class HuobiDigest extends BaseParamsDigest {
     String signature =
         encodeValue(Base64.getEncoder().encodeToString(mac.doFinal(toSign.getBytes())).trim());
     replaceSignatureUrl(restInvocation, signature);
+    System.out.println(toSign);
     return signature;
   }
 

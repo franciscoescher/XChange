@@ -11,9 +11,6 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiUtils;
-import org.knowm.xchange.huobi.dto.account.HuobiAccount;
-import org.knowm.xchange.huobi.dto.account.HuobiBalanceRecord;
-import org.knowm.xchange.huobi.dto.account.results.HuobiBalanceResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
@@ -108,7 +105,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     HuobiOrderResult result =
         huobi.placeLimitOrder(
             new HuobiCreateOrderRequest(
-                    accountID,
+                accountID,
                 limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
                 limitOrder.getLimitPrice().toString(),
                 HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
@@ -124,11 +121,16 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
   }
 
   String placeHuobiMarginLimitOrder(LimitOrder limitOrder) throws IOException {
-    String accountID = String.valueOf(
-            ((HuobiAccountServiceRaw) exchange.getAccountService())
-                    .getMarginAccount(limitOrder.getCurrencyPair()).getId());
+    CurrencyPair pair = limitOrder.getCurrencyPair();
+    String base = HuobiUtils.createHuobiAsset(pair.base);
+    String counter = HuobiUtils.createHuobiAsset(pair.counter);
 
-    return placeHuobiMarginLimitOrder(limitOrder, accountID);
+    long accountID =
+        ((HuobiAccountServiceRaw) exchange.getAccountService())
+            .getMarginAccount(base, counter)
+            .getId();
+
+    return placeHuobiMarginLimitOrder(limitOrder, String.valueOf(accountID));
   }
 
   String placeHuobiMarketOrder(MarketOrder marketOrder) throws IOException {
@@ -146,7 +148,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
                 String.valueOf(
                     ((HuobiAccountServiceRaw) exchange.getAccountService())
                         .getAccounts()[0].getId()),
-                    marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
                 null,
                 HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
                 type),
@@ -169,28 +171,33 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     }
 
     HuobiOrderResult result =
-            huobi.placeMarketOrder(
-                    new HuobiCreateOrderRequest(
-                            accountID,
-                            marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
-                            null,
-                            HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
-                            type,
-                            true),
-                    exchange.getExchangeSpecification().getApiKey(),
-                    HuobiDigest.HMAC_SHA_256,
-                    2,
-                    HuobiUtils.createUTCDate(exchange.getNonceFactory()),
-                    signatureCreator);
+        huobi.placeMarketOrder(
+            new HuobiCreateOrderRequest(
+                accountID,
+                marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                null,
+                HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
+                type,
+                true),
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
     return checkResult(result);
   }
 
   String placeHuobiMarginMarketOrder(MarketOrder marketOrder) throws IOException {
-    String accountID = String.valueOf(
-            ((HuobiAccountServiceRaw) exchange.getAccountService())
-                    .getMarginAccount(marketOrder.getCurrencyPair()).getId());
+    CurrencyPair pair = marketOrder.getCurrencyPair();
+    String base = HuobiUtils.createHuobiAsset(pair.base);
+    String counter = HuobiUtils.createHuobiAsset(pair.counter);
 
-    return placeHuobiMarginMarketOrder(marketOrder, accountID);
+    long accountID =
+        ((HuobiAccountServiceRaw) exchange.getAccountService())
+            .getMarginAccount(base, counter)
+            .getId();
+
+    return placeHuobiMarginMarketOrder(marketOrder, String.valueOf(accountID));
   }
 
   List<HuobiOrder> getHuobiOrder(String... orderIds) throws IOException {

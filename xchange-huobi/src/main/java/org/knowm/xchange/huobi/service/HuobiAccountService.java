@@ -98,14 +98,15 @@ public class HuobiAccountService extends HuobiAccountServiceRaw implements Accou
   }
 
   public String getMarginAccountID(CurrencyPair pair) throws IOException {
-    return HuobiAccountServiceRaw.getMarginAccountID
-            (HuobiUtils.createHuobiAsset(pair.base), HuobiUtils.createHuobiAsset(pair.counter));
+    return String.valueOf(
+        getMarginAccount(
+                HuobiUtils.createHuobiAsset(pair.base), HuobiUtils.createHuobiAsset(pair.counter))
+            .getId());
   }
 
-  public long requestBorrowCurrency(CurrencyPair pair, Currency currency, BigDecimal amount) throws IOException {
+  public long requestBorrowCurrency(CurrencyPair pair, Currency currency, BigDecimal amount)
+      throws IOException {
     return borrowCurrency(
-            HuobiUtils.createHuobiCurrencyPair(pair),
-            HuobiUtils.createHuobiAsset(currency),
-            amount);
+        HuobiUtils.createHuobiCurrencyPair(pair), HuobiUtils.createHuobiAsset(currency), amount);
   }
 }

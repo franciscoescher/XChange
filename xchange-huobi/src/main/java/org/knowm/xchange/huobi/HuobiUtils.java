@@ -36,7 +36,7 @@ public class HuobiUtils {
     String currency = assetMapReverse.get(currencyIn);
     if ((currency == null) || (currency.length() == 0)) {
       throw new ExchangeException(
-              String.format("Huobi doesn't support currency %s", currency.toString()));
+          String.format("Huobi doesn't support currency %s", currency.toString()));
     }
     return currency;
   }

@@ -37,7 +37,7 @@ public class HuobiAccount {
   }
 
   public boolean isMargin() {
-    if(this.type.equals("margin")) {
+    if (this.type.equals("margin")) {
       return true;
     }
     return false;

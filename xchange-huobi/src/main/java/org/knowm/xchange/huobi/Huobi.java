@@ -1,20 +1,12 @@
 package org.knowm.xchange.huobi;
 
 import java.io.IOException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import org.knowm.xchange.huobi.dto.account.HuobiBorrowCurrencyRequest;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.results.*;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetPairsResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetsResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiDepthResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTickerResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.*;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
@@ -33,6 +25,14 @@ public interface Huobi {
   @GET
   @Path("market/depth")
   HuobiDepthResult getDepth(@QueryParam("symbol") String symbol, @QueryParam("type") String type)
+      throws IOException;
+
+  @GET
+  @Path("market/history/kline")
+  HuobiKLineResult getKLine(
+      @QueryParam("symbol") String symbol,
+      @QueryParam("period") String period,
+      @QueryParam("size") int size)
       throws IOException;
 
   @GET
@@ -170,16 +170,14 @@ public interface Huobi {
       throws IOException;
 
   @POST
-  @Path("/v1/margin/orders")
+  @Path("v1/margin/orders")
   @Consumes(MediaType.APPLICATION_JSON)
   HuobiBorrowCurrencyResult borrowCurrency(
-          @QueryParam("symbol") String symbol,
-          @QueryParam("currency") String currency,
-          @QueryParam("amount") String amount,
-          @QueryParam("AccessKeyId") String apiKey,
-          @QueryParam("SignatureMethod") String signatureMethod,
-          @QueryParam("SignatureVersion") int signatureVersion,
-          @QueryParam("Timestamp") String nonce,
-          @QueryParam("Signature") ParamsDigest signature)
-          throws IOException;
+      HuobiBorrowCurrencyRequest body,
+      @QueryParam("AccessKeyId") String apiKey,
+      @QueryParam("SignatureMethod") String signatureMethod,
+      @QueryParam("SignatureVersion") int signatureVersion,
+      @QueryParam("Timestamp") String nonce,
+      @QueryParam("Signature") ParamsDigest signature)
+      throws IOException;
 }
