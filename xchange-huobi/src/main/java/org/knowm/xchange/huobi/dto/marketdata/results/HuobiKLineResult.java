@@ -65,12 +65,12 @@ public class HuobiKLineResult extends HuobiResult<HuobiKLine[]> {
     }
 
     int resultLenght = getResult().length;
-    for (int i = 1; i <= resultLenght; i++) {
+    for (int i = 0; i < resultLenght; i++) {
+      getResult()[i].setTs(tempTs);
       Calendar cal = Calendar.getInstance();
       cal.setTime(tempTs);
       cal.add(field, amount);
       tempTs = cal.getTime();
-      getResult()[resultLenght - i].setTs(tempTs);
     }
     this.ts = ts;
     this.ch = ch;
