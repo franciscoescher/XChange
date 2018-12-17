@@ -79,7 +79,10 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
                 String.valueOf(
                     ((HuobiAccountServiceRaw) exchange.getAccountService())
                         .getAccounts()[0].getId()),
-                limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                limitOrder
+                    .getOriginalAmount()
+                    .setScale(getCurrencyScale(limitOrder.getCurrencyPair()), BigDecimal.ROUND_DOWN)
+                    .toString(),
                 limitOrder.getLimitPrice().toString(),
                 HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
                 type),
@@ -106,7 +109,10 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
         huobi.placeLimitOrder(
             new HuobiCreateOrderRequest(
                 accountID,
-                limitOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                limitOrder
+                    .getOriginalAmount()
+                    .setScale(getCurrencyScale(limitOrder.getCurrencyPair()), BigDecimal.ROUND_DOWN)
+                    .toString(),
                 limitOrder.getLimitPrice().toString(),
                 HuobiUtils.createHuobiCurrencyPair(limitOrder.getCurrencyPair()),
                 type,
@@ -133,6 +139,15 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     return placeHuobiMarginLimitOrder(limitOrder, String.valueOf(accountID));
   }
 
+  int getCurrencyScale(CurrencyPair pair) {
+    if (pair.equals(CurrencyPair.TRX_USDT)) {
+      return 2;
+    } else if (pair.equals(CurrencyPair.XRP_USDT)) {
+      return 2;
+    }
+    return 4;
+  }
+
   String placeHuobiMarketOrder(MarketOrder marketOrder) throws IOException {
     String type;
     if (marketOrder.getType() == OrderType.BID) {
@@ -148,7 +163,11 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
                 String.valueOf(
                     ((HuobiAccountServiceRaw) exchange.getAccountService())
                         .getAccounts()[0].getId()),
-                marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                marketOrder
+                    .getOriginalAmount()
+                    .setScale(
+                        getCurrencyScale(marketOrder.getCurrencyPair()), BigDecimal.ROUND_DOWN)
+                    .toString(),
                 null,
                 HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
                 type),
@@ -174,7 +193,11 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
         huobi.placeMarketOrder(
             new HuobiCreateOrderRequest(
                 accountID,
-                marketOrder.getOriginalAmount().setScale(4, BigDecimal.ROUND_DOWN).toString(),
+                marketOrder
+                    .getOriginalAmount()
+                    .setScale(
+                        getCurrencyScale(marketOrder.getCurrencyPair()), BigDecimal.ROUND_DOWN)
+                    .toString(),
                 null,
                 HuobiUtils.createHuobiCurrencyPair(marketOrder.getCurrencyPair()),
                 type,
