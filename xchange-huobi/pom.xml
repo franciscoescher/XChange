@@ -22,16 +22,6 @@
         <url>http://knowm.org/open-source/xchange/</url>
     </organization>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-    </dependencies>
-
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
@@ -39,4 +29,16 @@
             <url>http://localhost:8081/artifactory/libs-snapshot-local</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-core</artifactId>
+            <version>4.3.13-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+
 </project>

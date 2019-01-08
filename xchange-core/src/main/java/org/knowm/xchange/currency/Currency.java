@@ -295,6 +295,7 @@ public class Currency implements Comparable<Currency>, Serializable {
   public static final Currency ELF = createCurrency("ELF", "aelf", null);
   public static final Currency STORJ = createCurrency("STORJ", "Storj", null);
   public static final Currency MOD = createCurrency("MOD", "Modum", null);
+  public static final Currency WICC = createCurrency("WICC", "WaykiChain", null);
   private final String code;
   private final CurrencyAttributes attributes;
 

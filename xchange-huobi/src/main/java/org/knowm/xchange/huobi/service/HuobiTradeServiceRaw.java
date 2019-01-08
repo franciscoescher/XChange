@@ -165,8 +165,11 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
         || pair.equals(CurrencyPair.EOS_USDT)
         || pair.equals(CurrencyPair.XRP_USDT)
         || pair.equals(CurrencyPair.OMG_USDT)
-        || pair.equals(CurrencyPair.STEEM_USDT)) {
+        || pair.equals(CurrencyPair.STEEM_USDT)
+        || pair.equals(CurrencyPair.WICC_USDT)) {
       return 4;
+    } else if (pair.equals(CurrencyPair.TRX_USDT)) {
+      return 6;
     }
     return 2;
   }
