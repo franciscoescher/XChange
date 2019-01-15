@@ -69,16 +69,10 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>snapshots</id>
+			<name>9c298aaba012-snapshots</name>
+			<url>http://localhost:8081/artifactory/libs-snapshot-local</url>
 		</snapshotRepository>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Nexus Release Repository</name>
-			<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-		<downloadUrl>https://oss.sonatype.org/content/groups/public/org/knowm/xchange</downloadUrl>
 	</distributionManagement>
 
 	<scm>
