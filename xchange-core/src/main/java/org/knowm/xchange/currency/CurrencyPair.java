@@ -154,6 +154,7 @@ public class CurrencyPair implements Comparable<CurrencyPair>, Serializable {
   public static final CurrencyPair XMR_BTC = new CurrencyPair(Currency.XMR, Currency.BTC);
   public static final CurrencyPair XMR_ETH = new CurrencyPair(Currency.XMR, Currency.ETH);
   public static final CurrencyPair XMR_USD = new CurrencyPair(Currency.XMR, Currency.USD);
+  public static final CurrencyPair XMR_USDT = new CurrencyPair(Currency.XMR, Currency.USDT);
 
   public static final CurrencyPair XPM_USD = new CurrencyPair(Currency.XPM, Currency.USD);
   public static final CurrencyPair XPM_CNY = new CurrencyPair(Currency.XPM, Currency.CNY);
@@ -184,6 +185,13 @@ public class CurrencyPair implements Comparable<CurrencyPair>, Serializable {
   public static final CurrencyPair TRX_USDT = new CurrencyPair(Currency.TRX, Currency.USDT);
   public static final CurrencyPair TRX_ETH = new CurrencyPair(Currency.TRX, Currency.ETH);
   public static final CurrencyPair TRX_BNB = new CurrencyPair(Currency.TRX, Currency.BNB);
+
+  public static final CurrencyPair EOS_USDT = new CurrencyPair(Currency.EOS, Currency.USDT);
+  public static final CurrencyPair OMG_USDT = new CurrencyPair(Currency.OMG, Currency.USDT);
+  public static final CurrencyPair ETC_USDT = new CurrencyPair(Currency.ETC, Currency.USDT);
+  public static final CurrencyPair QTUM_USDT = new CurrencyPair(Currency.QTUM, Currency.USDT);
+  public static final CurrencyPair ZEC_USDT = new CurrencyPair(Currency.ZEC, Currency.USDT);
+  public static final CurrencyPair WICC_USDT = new CurrencyPair(Currency.WICC, Currency.USDT);
 
   // start of extra ANX supported pair
   // BTC
@@ -333,12 +341,9 @@ public class CurrencyPair implements Comparable<CurrencyPair>, Serializable {
   public static final CurrencyPair ETC_7D =
       new CurrencyPair(Currency.ETC, Currency.getInstance("7D"));
 
-  public static final CurrencyPair EOS_USDT = new CurrencyPair(Currency.EOS, Currency.USDT);
-  public static final CurrencyPair OMG_USDT = new CurrencyPair(Currency.OMG, Currency.USDT);
-  public static final CurrencyPair ETC_USDT = new CurrencyPair(Currency.ETC, Currency.USDT);
-  public static final CurrencyPair QTUM_USDT = new CurrencyPair(Currency.QTUM, Currency.USDT);
-  public static final CurrencyPair ZEC_USDT = new CurrencyPair(Currency.ZEC, Currency.USDT);
-  public static final CurrencyPair WICC_USDT = new CurrencyPair(Currency.WICC, Currency.USDT);
+  // Bankera Exchange pairs
+  public static final CurrencyPair BNK_BTC = new CurrencyPair(Currency.BNK, Currency.BTC);
+  public static final CurrencyPair BNK_ETH = new CurrencyPair(Currency.BNK, Currency.ETH);
 
   public final Currency base;
   public final Currency counter;

@@ -7,6 +7,17 @@ import org.knowm.xchange.huobi.dto.account.HuobiBorrowCurrencyRequest;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.*;
+import org.knowm.xchange.huobi.dto.account.results.HuobiAccountResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiBalanceResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiCreateWithdrawResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressWithTagResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiFundingHistoryResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetPairsResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetsResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiDepthResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTickerResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTradesResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
@@ -33,6 +44,10 @@ public interface Huobi {
       @QueryParam("symbol") String symbol,
       @QueryParam("period") String period,
       @QueryParam("size") int size)
+      throws IOException;
+      
+  @Path("market/history/trade")
+  HuobiTradesResult getTrades(@QueryParam("symbol") String symbol, @QueryParam("size") int size)
       throws IOException;
 
   @GET
