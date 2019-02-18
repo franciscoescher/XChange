@@ -116,6 +116,7 @@ public class Currency implements Comparable<Currency>, Serializable {
   public static final Currency HNL = createCurrency("HNL", "Honduran Lempira", null);
   public static final Currency HRK = createCurrency("HRK", "Croatian Kuna", null);
   public static final Currency HTG = createCurrency("HTG", "Haitian Gourde", null);
+  public static final Currency HT = createCurrency("HT", "Huobi Token", null);
   public static final Currency HUF = createCurrency("HUF", "Hungarian Forint", null);
   public static final Currency ICN = createCurrency("ICN", "Iconomi", null);
   public static final Currency IDR = createCurrency("IDR", "Indonesian Rupiah", null);

@@ -154,7 +154,12 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
   }
 
   int getCurrencyAmountPrecision(CurrencyPair pair) {
-    if (pair.equals(CurrencyPair.TRX_USDT) || pair.equals(CurrencyPair.XRP_USDT)) {
+    if (pair.equals(CurrencyPair.XRP_BTC)) {
+      return 0;
+    } else if (pair.equals(CurrencyPair.TRX_USDT)
+        || pair.equals(CurrencyPair.XRP_USDT)
+        || pair.equals(CurrencyPair.EOS_BTC)
+        || pair.equals(CurrencyPair.HT_BTC)) {
       return 2;
     }
     return 4;
@@ -168,8 +173,17 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
         || pair.equals(CurrencyPair.STEEM_USDT)
         || pair.equals(CurrencyPair.WICC_USDT)) {
       return 4;
-    } else if (pair.equals(CurrencyPair.TRX_USDT)) {
+    } else if (pair.equals(CurrencyPair.TRX_USDT)
+        || pair.equals(CurrencyPair.BCH_BTC)
+        || pair.equals(CurrencyPair.ETH_BTC)
+        || pair.equals(CurrencyPair.ZEC_BTC)
+        || pair.equals(CurrencyPair.LTC_BTC)
+        || pair.equals(CurrencyPair.DASH_BTC)) {
       return 6;
+    } else if (pair.equals(CurrencyPair.EOS_BTC)
+        || pair.equals(CurrencyPair.XRP_BTC)
+        || pair.equals(CurrencyPair.HT_BTC)) {
+      return 8;
     }
     return 2;
   }
