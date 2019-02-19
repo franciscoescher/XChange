@@ -73,6 +73,7 @@ public class Currency implements Comparable<Currency>, Serializable {
   public static final Currency CUP = createCurrency("CUP", "Cuban Peso", null);
   public static final Currency CVE = createCurrency("CVE", "Cape Verdean Escudo", null);
   public static final Currency CZK = createCurrency("CZK", "Czech Republic Koruna", null);
+  public static final Currency DAC = createCurrency("DAC", "Davinci Coin", null);
   public static final Currency DASH = createCurrency("DASH", "Dash", null);
   public static final Currency DCR = createCurrency("DCR", "Decred", null);
   public static final Currency DGB = createCurrency("DGB", "DigiByte", null);

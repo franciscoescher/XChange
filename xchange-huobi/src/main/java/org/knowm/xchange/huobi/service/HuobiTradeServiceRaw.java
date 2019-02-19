@@ -159,7 +159,8 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     } else if (pair.equals(CurrencyPair.TRX_USDT)
         || pair.equals(CurrencyPair.XRP_USDT)
         || pair.equals(CurrencyPair.EOS_BTC)
-        || pair.equals(CurrencyPair.HT_BTC)) {
+        || pair.equals(CurrencyPair.HT_BTC)
+        || pair.equals(CurrencyPair.DAC_BTC)) {
       return 2;
     }
     return 4;
@@ -184,6 +185,8 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
         || pair.equals(CurrencyPair.XRP_BTC)
         || pair.equals(CurrencyPair.HT_BTC)) {
       return 8;
+    } else if (pair.equals(CurrencyPair.DAC_BTC)) {
+      return 10;
     }
     return 2;
   }
