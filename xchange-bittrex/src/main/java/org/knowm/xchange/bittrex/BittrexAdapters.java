@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.knowm.xchange.bittrex.dto.account.BittrexBalance;
 import org.knowm.xchange.bittrex.dto.account.BittrexDepositHistory;
 import org.knowm.xchange.bittrex.dto.account.BittrexWithdrawalHistory;
@@ -74,9 +73,7 @@ public final class BittrexAdapters {
   public static LimitOrder adaptOrder(BittrexOrderBase order, OrderStatus status) {
 
     OrderType type =
-        order.getOrderType().equalsIgnoreCase("LIMIT_SELL")
-            ? OrderType.ASK
-            : OrderType.BID;
+        order.getOrderType().equalsIgnoreCase("LIMIT_SELL") ? OrderType.ASK : OrderType.BID;
     String[] currencies = order.getExchange().split("-");
     CurrencyPair pair = new CurrencyPair(currencies[1], currencies[0]);
 
@@ -86,7 +83,10 @@ public final class BittrexAdapters {
         .timestamp(order.getOpened())
         .limitPrice(order.getLimit())
         .averagePrice(order.getPricePerUnit())
-        .cumulativeAmount(order.getQuantityRemaining() == null ? null : order.getQuantity().subtract(order.getQuantityRemaining()))
+        .cumulativeAmount(
+            order.getQuantityRemaining() == null
+                ? null
+                : order.getQuantity().subtract(order.getQuantityRemaining()))
         .fee(order.getCommissionPaid())
         .orderStatus(status)
         .build();

@@ -22,6 +22,13 @@
         <url>http://knowm.org/open-source/xchange/</url>
     </organization>
 
+    <repositories>
+        <repository>
+            <id>snapshots-local</id>
+            <url>http://localhost:8081/artifactory/libs-snapshot-local</url>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>

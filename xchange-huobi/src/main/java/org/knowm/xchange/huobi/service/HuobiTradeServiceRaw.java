@@ -76,7 +76,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     HuobiOrderResult result =
         huobi.placeLimitOrder(
             new HuobiCreateOrderRequest(
-                    getAccountId(),
+                getAccountId(),
                 limitOrder
                     .getOriginalAmount()
                     .setScale(
@@ -201,7 +201,7 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
     HuobiOrderResult result =
         huobi.placeMarketOrder(
             new HuobiCreateOrderRequest(
-                    getAccountId(),
+                getAccountId(),
                 marketOrder
                     .getOriginalAmount()
                     .setScale(
@@ -282,6 +282,6 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
 
   private String getAccountId() throws IOException {
     return String.valueOf(
-            ((HuobiAccountServiceRaw) exchange.getAccountService()).getAccounts()[0].getId());
+        ((HuobiAccountServiceRaw) exchange.getAccountService()).getAccounts()[0].getId());
   }
 }
