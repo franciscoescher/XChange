@@ -2,10 +2,17 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <repositories>
+        <repository>
+            <id>snapshots-local</id>
+            <url>http://localhost:8081/artifactory/libs-snapshot-local</url>
+        </repository>
+    </repositories>
+
     <parent>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-parent</artifactId>
-        <version>4.3.17-SNAPSHOT</version>
+        <version>4.3.22-SNAPSHOT</version>
     </parent>
 
     <artifactId>xchange-poloniex</artifactId>
@@ -30,5 +37,13 @@
         </dependency>
 
     </dependencies>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>9c298aaba012-snapshots</name>
+            <url>http://localhost:8081/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
