@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.huobi.HuobiUtils;
+import org.knowm.xchange.huobi.dto.account.*;
 import org.knowm.xchange.huobi.dto.account.HuobiAccount;
 import org.knowm.xchange.huobi.dto.account.HuobiBalance;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
@@ -12,6 +13,7 @@ import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
 import org.knowm.xchange.huobi.dto.account.HuobiWithdrawFeeRange;
 import org.knowm.xchange.huobi.dto.account.results.HuobiAccountResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiBalanceResult;
+import org.knowm.xchange.huobi.dto.account.results.HuobiBorrowCurrencyResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiCreateWithdrawResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressWithTagResult;
@@ -118,5 +120,41 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
             HuobiUtils.createUTCDate(exchange.getNonceFactory()),
             signatureCreator);
     return checkResult(createWithdrawResult);
+  }
+
+  public HuobiAccount getMarginAccount(String base, String counter) throws IOException {
+    for (HuobiAccount account : this.getAccounts()) {
+      if (!account.isMargin()) {
+        continue;
+      }
+      int c = 0;
+      HuobiBalance balance = getHuobiBalance(String.valueOf(account.getId()));
+      for (HuobiBalanceRecord balanceRecord : balance.getList()) {
+        if (!balanceRecord.getType().equals("trade")) {
+          continue;
+        }
+
+        String balanceCurrency = balanceRecord.getCurrency();
+        if (balanceCurrency.equals(base) || balanceCurrency.equals(counter)) {
+          c += 1;
+        }
+      }
+      if (c >= 2) {
+        return account;
+      }
+    }
+    throw new IOException("Margin account not found for currency pair " + base + counter);
+  }
+
+  long borrowCurrency(String symbol, String currency, BigDecimal amount) throws IOException {
+    HuobiBorrowCurrencyResult borrowCurrencyResult =
+        huobi.borrowCurrency(
+            new HuobiBorrowCurrencyRequest(symbol, currency, String.valueOf(amount)),
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResult(borrowCurrencyResult);
   }
 }
