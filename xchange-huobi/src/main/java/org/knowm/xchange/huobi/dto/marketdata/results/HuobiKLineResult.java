@@ -34,6 +34,10 @@ public class HuobiKLineResult extends HuobiResult<HuobiKLine[]> {
         field = Calendar.MINUTE;
         amount = -1;
         break;
+      case "5min":
+        field = Calendar.MINUTE;
+        amount = -5;
+        break;
       case "15min":
         field = Calendar.MINUTE;
         amount = -15;
